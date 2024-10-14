@@ -1,0 +1,3 @@
+resources/profile_path
+tools/geckodriver*
+tools/useragent_sourcer
