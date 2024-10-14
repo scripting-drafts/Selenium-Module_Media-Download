@@ -14,7 +14,6 @@ class SeleniumWireModule:
         path_geckodriver_log = path.abspath('resources/geckodriver.log')
         log = logg.logging()
         localhost = '127.0.0.1'
-        initial_url = 'https://www.google.com'
 
         options = Options()
         # options.add_argument('--headless')
@@ -43,7 +42,6 @@ class SeleniumWireModule:
 
         self.log = log
         self.localhost = localhost
-        self.initial_url = initial_url
         self.driver = driver
 
     def get_to(self, url):
