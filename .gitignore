@@ -1,3 +1,4 @@
-resources/profile_path
+resources/*
 tools/geckodriver*
 tools/useragent_sourcer
+tools/__pycache__

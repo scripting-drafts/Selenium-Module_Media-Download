@@ -16,7 +16,7 @@ class SeleniumWireModule:
         localhost = '127.0.0.1'
 
         options = Options()
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         options.set_preference('dom.webnotifications.enabled', False)
         options.set_preference('dom.push.enabled', False)
         options.set_preference('dom.webdriver.enabled', False)
@@ -61,10 +61,11 @@ class SeleniumWireModule:
         self.title = title
 
     def get_content(self):
+        matches = [".m3u8", "1080"]
         for request in self.driver.requests:
-            if ".m3u8" in request.url:
+            if all(x in request.url for x in matches):
                 self.log.debug(f'URL contains streaming: {request.url}')
-                call(f'ffmpeg -protocol_whitelist file,http,https,tcp,tls,crypto -i {request.url} -c copy {self.title}.mp4')
+                call(f'ffmpeg -y -protocol_whitelist file,http,https,tcp,tls,crypto -i {request.url} -c copy {self.title}.mp4')
 
     
     def healthcheck(self):
@@ -94,11 +95,14 @@ class SeleniumWireModule:
             self.log.error('Unsuccessful driver termination')
 
 
-urls = open('urls.txt', 'r').readlines()
+urls = open('resources/urls.txt', 'r').readlines()
 wm = SeleniumWireModule()
 
-for url in urls:
-    wm.get_to(url)
-    wm.get_content()
+if urls[1:]:
+    for url in urls:
+        wm.get_to(url)
+        wm.get_content()
+else:
+    wm.get_to(''.join(urls))
 
 wm.tearDown()
